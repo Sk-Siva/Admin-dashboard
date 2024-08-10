@@ -1,24 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { Container, Row, Col } from 'react-bootstrap';
+import Home from './components/Home';
+import UserListing from './components/UserListing';
+import PostListing from './components/PostListing';
+import Login from './components/Login';
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
+
+import "./app.css"
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AuthProvider>
+      <Router>
+        <Container fluid className='main-container'>
+          <Row>
+            <Col xs={12}>
+              <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route element={<ProtectedRoute />}>
+                  <Route path="/users" element={<UserListing />} />
+                  <Route path="/posts" element={<PostListing />} />
+                  <Route path="/" element={<Home />} />
+                </Route>
+                <Route path="*" element={<Navigate to="/" />} />
+              </Routes>
+            </Col>
+          </Row>
+        </Container>
+      </Router>
+    </AuthProvider>
   );
 }
 
